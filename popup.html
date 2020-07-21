@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Linux Scroll Speed Fix</title>
+
+        <link rel="stylesheet" href="popup.css">
+    </head>
+    <body>
+        <label class="title">Linux Scroll Speed Fix</label>
+
+        <div class="os-wrapper">
+            <label for="osDetected">OS detected:</label>
+            <label id="osDetected">Unknown</label>
+        </div>
+
+        <div class="scroll-wrapper">
+            <label for="scrollFactor">Scroll factor:</label>
+            <input id="scrollFactor" type="number" min="0" max="1000" step="0.1" value="1">
+            <label>Unlock custom:
+                <input id="customToggle" type="checkbox">
+            </label>
+        </div>
+
+        <div class="smooth-wrapper">
+            <label for="smoothToggle">Disable CSS scroll smoothing:
+                <input id="smoothToggle" type="checkbox">
+            </label>
+            <label id="recommended">(Refresh browser)</label>
+            
+        </div>
+
+        <div class="version">
+            <label id="github-link"><a href="https://github.com/Dedas/linux-scroll-speed-fix.git" target="_blank">Github page<a></label>
+            <label id="version">Version 1.5.1</label>
+        </div>
+
+        <script type="text/javascript" src="popup.js"></script>
+    </body>
+</html>

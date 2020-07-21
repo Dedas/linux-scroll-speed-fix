@@ -1,0 +1,92 @@
+body {
+    margin: 0em;
+    min-width: 25em;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: blue;
+}
+
+#osDetected {
+    font-weight: bold;
+}
+
+#scrollFactor {
+    font-weight: bold;
+    margin-right: auto;
+}
+
+#recommended {
+    font-size: 0.7em;
+    margin: 0em;
+}
+
+input {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    max-width: 4em;
+}
+
+input[type=checkbox] {
+    margin: 0em;
+    margin-left: 0.5em;
+}
+
+input:disabled {
+    background-color: white;
+    color: black;
+    border: none;
+}
+
+input:enabled {
+    border: none;
+    background: lightgray;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5em;
+    font-size: 1.2em;
+}
+
+.title {
+    margin: 0;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.4em;
+    color: white;
+    background-color: #4D9541; 
+}
+
+.os-wrapper {
+    display: flex;
+    padding: 0.5em;
+}
+
+.scroll-wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5em;
+}
+
+.smooth-wrapper {
+    display: flex;
+    justify-content: start;
+    padding: 0.5em;
+}
+
+.version {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    font-size: 0.7em;
+    color: grey;
+    padding: 1em 0.5em;
+}
