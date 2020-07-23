@@ -1,8 +1,8 @@
 {
   "name": "Linux Scroll Speed Fix",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Fix the slow scroll speed in Linux Chrome by setting it to the Windows value",
-  "permissions": ["storage", "activeTab", "http://*/*", "https://*/*"],
+  "permissions": ["storage", "http://*/*", "https://*/*"],
   "background": {
     "page": "content.js"
   },

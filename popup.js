@@ -63,6 +63,9 @@ function detectOS() {
                 inputScrollFactor.value = macSpeed
             }
         }
+
+        // Update scroll instantly to current tab
+        updateScrollFactor();
     });
 }
 
@@ -119,6 +122,8 @@ chrome.storage.sync.get(function (items) {
 function updateScrollFactor() {
     const factor = parseFloat(inputScrollFactor.value);
 
+    console.log(inputScrollFactor.value);
+
     if (factor < 0 || factor > 1000) {
         return;
     }
@@ -126,7 +131,6 @@ function updateScrollFactor() {
     chrome.storage.sync.set({'scrollFactor': factor});
 
     chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function(tabs) {
-        console.log(tabs);
         chrome.tabs.sendMessage(tabs[0].id, {scrollFactor: factor, CSS: 'ChangeScrollSpeed'});
     });
 }

@@ -2,6 +2,10 @@
 
 #### Download: [Chrome web store package](https://chrome.google.com/webstore/detail/linux-scroll-speed-fix/mlboohjioameadaedfjcpemcaangkkbp)
 
+#### Changelog version 1.5.2
+- Reduced Chrome permissions needed
+- Minor bug fix
+
 #### Changelog version 1.5.1
 - iFrame security workaround
 
