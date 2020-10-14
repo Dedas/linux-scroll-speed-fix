@@ -53,7 +53,7 @@ function detectOS() {
                 chrome.storage.sync.set({'scrollFactor': windowsSpeed});
                 inputScrollFactor.value = windowsSpeed
 
-                chrome.storage.local.set({'smoothToggle':'false'})
+                chrome.storage.local.set({'smoothToggle':'true'})
                 smoothToggle.checked = false;
                 smoothToggle.disabled = true;
             }
