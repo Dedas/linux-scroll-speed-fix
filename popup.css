@@ -25,6 +25,40 @@ a:visited {
     margin: 0em;
 }
 
+#statusText {
+    font-weight: bold;
+}
+
+.tooltip {
+    position: relative;
+    border-bottom: 1px dashed #000;
+}
+
+.tooltip:before {
+    content: attr(data-text);
+    position:absolute;
+
+    top:10%;
+    transform:translateY(-110%);
+
+    left:-150%;
+    margin-left:15px;
+
+    width:175px;
+    height:auto;
+    padding:5px;
+    border-radius:10px;
+    background:#000;
+    color: white;
+    font-size: 0.7rem;
+
+    display: none;
+}
+
+.tooltip:hover:before {
+    display: block;
+}
+
 input {
     display: flex;
     align-items: center;
@@ -66,7 +100,17 @@ label {
 
 .os-wrapper {
     display: flex;
+    justify-content: space-between;
     padding: 0.5em;
+}
+
+.osDetected {
+    display: flex;
+}
+
+.statusText {
+    display: flex;
+
 }
 
 .scroll-wrapper {

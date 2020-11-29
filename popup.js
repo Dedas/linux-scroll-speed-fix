@@ -1,139 +1,301 @@
-const inputScrollFactor = document.getElementById('scrollFactor');
+// User information elements
 const osText = document.getElementById('osDetected');
-const customToggle = document.getElementById('customToggle');
-const smoothToggle = document.getElementById('smoothToggle');
+const statusText = document.getElementById('statusText');
+
+// User input elements
+const scrollFactorInput = document.getElementById('scrollFactorInput');
+const customSettingButton = document.getElementById('customSettingButton');
+const smoothScrollButton = document.getElementById('smoothScrollButton');
 
 // Default scroll speed variables
 const linuxSpeed = 1.9;
 const windowsSpeed = 1.0;
 const macSpeed = 1.0;
 
-// Get local storage and set checkbox
-chrome.storage.local.get('smoothToggle', function(items){
-    if(items.smoothToggle == 'false') {
-        smoothToggle.checked = false;
-    } else {
-        smoothToggle.checked = true;
-    }
-});
+// *** INIT ***
 
-// Check if custom settings are enabled
-chrome.storage.local.get('customToggle', function(items){
-    if(items.customToggle == 'true') {
-        customToggle.checked = true;
-        inputScrollFactor.disabled = false;
-
-        osText.innerHTML = 'Custom';
-    } else {
-        // Start OS detection
-        detectOS();
-        customToggle.checked = false;
-        inputScrollFactor.disabled = true;
-    }
-});
+init();
 
 // Detects OS and set scroll speed
-function detectOS() {
-    chrome.runtime.getPlatformInfo(function (info) {
-    
-        // Do not initiate if custom speed is checked
-        if(customToggle.checked == false) {
+async function init() {
+    let smoothScroll = await getSmoothScroll();
+    let customSetting = await getCustomSetting();
+    let os = await getOS();
+
+    // Do not initiate if custom settings is checked
+    if(customSetting !== 'true') {
+        if(os == 'linux') {
+            // Set Linux values
+            osText.innerHTML = 'Linux';
+            statusText.innerHTML = 'Enabled';
             
-            if(info.os == 'linux') {
-                osText.innerHTML = 'Linux';
-                chrome.storage.sync.set({'scrollFactor': linuxSpeed});
-                inputScrollFactor.value = linuxSpeed;
+            scrollFactorInput.value = linuxSpeed;
+            scrollFactorInput.disabled = true;
 
-                chrome.storage.local.set({'smoothToggle':'true'})
-                smoothToggle.checked = true;
-                smoothToggle.disabled = true;
-            }
-            if(info.os == 'win') {
-                osText.innerHTML = 'Windows';
-                chrome.storage.sync.set({'scrollFactor': windowsSpeed});
-                inputScrollFactor.value = windowsSpeed
+            smoothScrollButton.disabled = true;
+            smoothScrollButton.checked = false;
+            
+            customSettingButton.checked = false;
 
-                chrome.storage.local.set({'smoothToggle':'false'})
-                smoothToggle.checked = false;
-                smoothToggle.disabled = true;
-            }
-            if(info.os == 'mac') {
-                osText.innerHTML = 'Apple';
-                chrome.storage.sync.set({'scrollFactor': macSpeed});
-                inputScrollFactor.value = macSpeed
-            }
+            setScrollFactor(linuxSpeed);
+        } else if(os == 'win') {
+            // Set Windows values
+            osText.innerHTML = 'Windows';
+            statusText.innerHTML = 'Disabled';
+            
+            scrollFactorInput.value = windowsSpeed
+            scrollFactorInput.disabled = true;
+            
+            smoothScrollButton.disabled = true;
+            smoothScrollButton.checked = true;
+            
+            customSettingButton.checked = false;
+
+            setScrollFactor(windowsSpeed);
+        } else if(os == 'mac') {
+            osText.innerHTML = 'MacOS';
+            statusText.innerHTML = 'Disabled'
+            
+            scrollFactorInput.value = macSpeed
+            scrollFactorInput.disabled = true;
+            
+            smoothScrollButton.disabled = true;
+            smoothScrollButton.checked = true;
+            
+            customSettingButton.checked = false;
+            
+            setScrollFactor(macSpeed);
+        }      
+    } else {
+        // Custom settings
+        let scrollFactor = await getScrollFactor();
+
+        osText.innerHTML = 'Custom';
+        statusText.innerHTML = 'Enabled';
+        
+        scrollFactorInput.value = scrollFactor;
+        scrollFactorInput.disabled = false;
+        
+        smoothScrollButton.disabled = false;
+        
+        customSettingButton.checked = true;
+
+        if(smoothScroll == 'true') {
+            smoothScrollButton.checked = true;
+        } else {
+            smoothScrollButton.checked = false;       
         }
+    }
 
-        // Update scroll instantly to current tab
-        updateScrollFactor();
+    updateDisableExtension();
+    updateSmoothScroll();
+}
+
+// Detect OS
+async function getOS() {
+    return new Promise((resolve, reject) => {
+        try {
+            chrome.runtime.getPlatformInfo(function (info) {
+                resolve(info.os);
+            })
+        }
+        catch (ex) {
+            reject(ex)
+        }
     });
 }
 
-// Listen on smooth toggle checkbox
-smoothToggle.addEventListener('change', function() {
+// *** SETTINGS ***
 
-    // Store toggle settings locally
-    if(smoothToggle.checked == true) {
-        chrome.storage.local.set({'smoothToggle':'true'});
-    } else {
-        chrome.storage.local.set({'smoothToggle':'false'});
-    }
-});
-
-// Listen on custom check toggle
-customToggle.addEventListener('change', function() {
-
-    if(customToggle.checked == true) {
-
-        // Store toggle settings
-        chrome.storage.local.set({'customToggle':'true'}, function(){
-            customToggle.checked = true;
-            inputScrollFactor.disabled = false;
-            smoothToggle.disabled = false;
-
-            osText.innerHTML = 'Custom';
-        });
-    } else {
-        
-        // Store toggle settings
-        chrome.storage.local.set({'customToggle':'false'}, function(){
-            customToggle.checked = false;
-            inputScrollFactor.disabled = true;
-
-            // Redetect OS for instant response
-            detectOS();
-        });
-    }
-});
-
-function saveLocal(value) {
-    chrome.storage.local.set({isToggled:value}, function() {
-
-        console.log('Value is set to ' + value);
-      });
+// Get setting key variable
+async function getSetting(key) {
+    return new Promise((resolve, reject) => {
+        try {
+            chrome.storage.local.get(key, function(items){
+                resolve(items);
+            })
+        }
+        catch (ex) {
+            reject(ex);
+        }
+    });
 }
 
-chrome.storage.sync.get(function (items) {
-    if (items['scrollFactor'] !== undefined) {
-        inputScrollFactor.value = items['scrollFactor'];
-    }
-})
+// SCROLL FACTOR
 
-function updateScrollFactor() {
-    const factor = parseFloat(inputScrollFactor.value);
+async function getScrollFactor() {
+    let result = await getSetting('scrollFactor');
 
-    console.log(inputScrollFactor.value);
+    return result.scrollFactor;
+}
 
-    if (factor < 0 || factor > 1000) {
+function setScrollFactor(value) {
+
+    if (value < 0 || value > 1000) {
         return;
+    } else {
+        chrome.storage.local.set({'scrollFactor': value});
     }
 
-    chrome.storage.sync.set({'scrollFactor': factor});
+    updateScrollFactor();
+}
+
+async function updateScrollFactor() {
+    let value = parseFloat(await getScrollFactor());
 
     chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {scrollFactor: factor, CSS: 'ChangeScrollSpeed'});
+        chrome.tabs.sendMessage(tabs[0].id, {scrollFactor: value, CSS: 'ChangeScrollSpeed'});
     });
 }
 
-inputScrollFactor.addEventListener('change', updateScrollFactor);
-inputScrollFactor.addEventListener('keyup', updateScrollFactor);
+// SMOOTH SCROLL
+
+// Get smoothscroll variable
+async function getSmoothScroll() {
+    let result = await getSetting('smoothScroll');
+
+    return result.smoothScroll;
+}
+
+// Set smoothscroll variable
+function setSmoothScroll(value) {
+    chrome.storage.local.set({'smoothScroll':value})
+}
+
+// Apply smooth scroll setting when button is pressed in popup.js
+function updateSmoothScroll() {
+    
+    if(smoothScrollButton.checked == true) {
+        setSmoothScroll('true');
+        disableSmoothCSS(false);
+    } else {
+        setSmoothScroll('false');
+        disableSmoothCSS(true);
+    }
+}
+
+// This function disables and enables CSS smooth scrolling
+function disableSmoothCSS(value) {
+    
+    chrome.tabs.query({windowType: "normal"}, function(tabs) {
+
+        if(value) {
+            // Code to insert
+            let code = `document.querySelectorAll("html")[0].style.scrollBehavior = "auto";`;
+
+            // Loop through all tabs and insert code
+            executeScriptAllTabs(code);
+
+        } else {
+            // Code to insert
+            let code = `document.querySelectorAll("html")[0].style.scrollBehavior = "";`;
+
+            // Loop through all tabs and insert code
+            executeScriptAllTabs(code);
+
+        }
+    });
+}
+
+function executeScriptAllTabs(code) {
+
+    chrome.tabs.query({windowType: "normal"}, function(tabs) {
+
+        for(let i = 0; i < tabs.length; i++) {
+            try {
+                if(tabs[i].url) {
+                    chrome.tabs.executeScript(tabs[i].id, { code }, function() {
+                        if(chrome.runtime.lastError) {} // Suppress error
+                    });  
+                }
+            }
+            catch(err) {
+                console.log(err);
+            }
+        }
+    });
+}
+
+/* REFRESH TABS - Not used
+
+function refreshTab(message) {
+
+    if((message) && (confirm(message))) {
+        chrome.tabs.getAllInWindow(null, function(tabs) {
+            for(let i = 0; i < tabs.length; i++) {
+                chrome.tabs.update(tabs[i].id, {url: tabs[i].url});
+            }
+        });
+    } else {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.update(tabs[0].id, {url: tabs[0].url});
+        });
+    };
+}
+*/
+
+// CUSTOM SETTING
+
+async function getCustomSetting() {
+    let result = await getSetting('customSetting');
+
+    return result.customSetting;
+}
+
+// Set custom setting variable
+function setCustomSetting(value) {
+    chrome.storage.local.set({'customSetting': value});
+}
+
+// Apply custom setting variable in popup.js
+function updateCustomSetting() {
+    
+        // Enable custom settings
+        if(customSettingButton.checked == true) {
+            setCustomSetting('true');
+        } else {
+            setCustomSetting('false');
+        }
+
+        // Redetect settings
+        init();
+}
+
+// DISABLE EXTENSION
+
+async function getDisableExtension() {
+    let result = await getSetting('disableExtension');
+
+    return result.disableExtension;
+}
+
+function setDisableExtension(value) {
+    chrome.storage.local.set({'disableExtension':value});
+}
+
+function updateDisableExtension() {
+
+    if(statusText.innerHTML == 'Enabled') {
+        setDisableExtension('false');
+    } else {
+        setDisableExtension('true');
+    }
+}
+
+// *** LISTENERS ***
+
+// Custom setting button
+customSettingButton.addEventListener('change', updateCustomSetting);
+
+// Smooth Scroll button
+smoothScrollButton.addEventListener('change', updateSmoothScroll);
+
+// Scroll factor input field
+scrollFactorInput.addEventListener('change', () => {
+    setScrollFactor(scrollFactorInput.value);
+});
+
+// Maybe?
+scrollFactorInput.addEventListener('keyup', () => {
+    setScrollFactor(scrollFactorInput.value);
+});

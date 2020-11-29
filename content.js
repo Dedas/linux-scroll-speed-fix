@@ -2,162 +2,237 @@
 
 let scrollFactor = 1.0;
 
-//console.log(document.querySelectorAll("html"));
+// *** SETTINGS FETCHERS ***
 
-//Disable scroll smothing by setting smooth to auto
-chrome.storage.local.get('smoothToggle', function(items) {
-    if(items.smoothToggle !== 'false') {
-        document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
+// Get setting key variable
+async function getSetting(key) {
+    return new Promise((resolve, reject) => {
+        try {
+            chrome.storage.local.get(key, function(items){
+                resolve(items);
+            })
+        }
+        catch (ex) {
+            reject(ex);
+        }
+    });
+}
+
+async function getScrollFactor() {
+    let result = await getSetting('scrollFactor');
+
+    return result.scrollFactor;
+}
+
+async function getDisableExtension() {
+    let result = await getSetting('disableExtension');
+
+    return result.disableExtension;
+}
+
+async function getSmoothScroll() {
+    let result = await getSetting('smoothScroll');
+
+    return result.smoothScroll;
+}
+
+// *** INIT ***
+
+init();
+
+async function init() {
+    let disableExtension = await getDisableExtension();
+    let smoothScroll = await getSmoothScroll();
+
+    // Check if extension is disabled. If not run main function.
+    if(disableExtension == 'false') {  
+        
+        // Disable smooth scroll if needed
+        if(smoothScroll == 'false') {
+            try {
+                document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
+            }
+            catch(err) {
+                `console`.log(err);
+            }
+        }
+        
+        // Run main function
+        main();
+    }
+}
+
+// Main function
+async function main() {
+
+    /* TODO Needs rework with new code
+    let smoothScroll = await getSmoothScroll();
+
+    //Check for changes in html element to deal with banners changing smooth scrolling behavior
+    
+    if(smoothScroll == 'false') {
+        let mutationObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function() {
+                document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
+            });
+        });
 
         //Extra surveillance for naughty changes
         mutationObserver.observe(document.querySelectorAll("html")[0], {
             attributes: true,
         }); 
     }
-});
-
-//Check for changes in html element to deal with banners changing smooth scrolling behavior
-let mutationObserver = new MutationObserver(function(mutations) {
-    mutations.forEach(function() {
-        document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
-    });
-});
-
-chrome.storage.sync.get(function (items) {
-    if (items['scrollFactor'] !== undefined) {
-        scrollFactor = items['scrollFactor'];
+    */
+        
+    if (scrollFactor !== undefined) {
+        scrollFactor = await getScrollFactor();
     }
-})
-
-function wheel(event) {
-    const target = event.target;
-
-    if (event.defaultPrevented || event.ctrlKey) {
-        return true;
-    }
-
-    let deltaX = event.deltaX;
-    let deltaY = event.deltaY;
-
-    if (event.shiftKey && !(event.ctrlKey || event.altKey || event.metaKey)) {
-        deltaX = deltaX || deltaY;
-        deltaY = 0;
-    }
-
-    const xOnly = (deltaX && !deltaY);
-
-    let element = overflowingAncestor(target, xOnly);
-
-    if (element === getScrollRoot() || element === document.body) {
-        element = window;
-    }
-
-    const isFrame = window.top !== window.self;
     
-    if ( ! element) {
-        if (isFrame) {
-            parent.postMessage({
-                deltaX: deltaX,
-                deltaY: deltaY,
-                CSS: 'ChangeScrollSpeed'
-            }, '*');
+    // This function runs every time a scroll is made
+    function wheel(event) {
+        const target = event.target;
 
-            if (event.preventDefault) {
-                // TODO
-                // Is there a better solution for the iFrames?
-                // Disabled due to cross site security blocking on some sites
-                // Will hopefully not cause issues
+        console.log(target);
 
-                //event.preventDefault();
+        if (event.defaultPrevented || event.ctrlKey) {
+            return true;
+        }
+    
+        let deltaX = event.deltaX;
+        let deltaY = event.deltaY;
+    
+        if (event.shiftKey && !(event.ctrlKey || event.altKey || event.metaKey)) {
+            deltaX = deltaX || deltaY;
+            deltaY = 0;
+        }
+    
+        const xOnly = (deltaX && !deltaY);
+    
+        let element = overflowingAncestor(target, xOnly);
+    
+        if (element === getScrollRoot() || element === document.body) {
+            element = window;
+        }
+    
+        const isFrame = window.top !== window.self;
+
+        if ( ! element) {
+            if (isFrame) {
+
+                parent.postMessage({
+                    deltaX: deltaX,
+                    deltaY: deltaY,
+                    CSS: 'ChangeScrollSpeed'
+                }, '*');
+
+                if (event.preventDefault) {
+                    // TODO
+                    // Is there a better solution for the iFrames?
+                    // Disabled due to cross site security blocking on some sites
+                    // Will hopefully not cause issues
+                }
             }
+    
+            return true;
+        }
+    
+        element.scrollBy(deltaX * scrollFactor, deltaY * scrollFactor);
+    
+        if (event.preventDefault) {
+            event.preventDefault();
         }
 
-        return true;
     }
-
-    element.scrollBy(deltaX * scrollFactor, deltaY * scrollFactor);
-
-    if (event.preventDefault) {
-        event.preventDefault();
-    }
-}
-
-function overflowingAncestor(element, horizontal) {
-    const body = document.body;
-    const root = window.document.documentElement
-    const rootScrollHeight = root.scrollHeight;
-    const rootScrollWidth = root.scrollWidth;
-    const isFrame = window.top !== window.self;
-
-    do {
-        if (horizontal && rootScrollWidth === element.scrollWidth ||
-            !horizontal && rootScrollHeight === element.scrollHeight) {
-            const topOverflowsNotHidden = overflowNotHidden(root, horizontal) && overflowNotHidden(body, horizontal);
-            const isOverflowCSS = topOverflowsNotHidden || overflowAutoOrScroll(root, horizontal);
-
-            if (isFrame && isContentOverflowing(root, horizontal) || !isFrame && isOverflowCSS) {
-
-                return getScrollRoot()
+    
+    function overflowingAncestor(element, horizontal) {
+        const body = document.body;
+        const root = window.document.documentElement
+        const rootScrollHeight = root.scrollHeight;
+        const rootScrollWidth = root.scrollWidth;
+        const isFrame = window.top !== window.self;
+    
+        do {
+            if (horizontal && rootScrollWidth === element.scrollWidth ||
+                !horizontal && rootScrollHeight === element.scrollHeight) {
+                const topOverflowsNotHidden = overflowNotHidden(root, horizontal) && overflowNotHidden(body, horizontal);
+                const isOverflowCSS = topOverflowsNotHidden || overflowAutoOrScroll(root, horizontal);
+    
+                if (isFrame && isContentOverflowing(root, horizontal) || !isFrame && isOverflowCSS) {
+    
+                    return getScrollRoot()
+                }
+            } else if (isContentOverflowing(element, horizontal) && overflowAutoOrScroll(element, horizontal)) {
+                
+                return element;
             }
-        } else if (isContentOverflowing(element, horizontal) && overflowAutoOrScroll(element, horizontal)) {
-            
-            return element;
+        } while ((element = element.parentElement));
+    }
+    
+    function isContentOverflowing(element, horizontal) {
+        const client = horizontal ? element.clientWidth : element.clientHeight;
+        const scroll = horizontal ? element.scrollWidth : element.scrollHeight;
+    
+        return (client + 10 < scroll);
+    }
+    
+    function computedOverflow(element, horizontal) {
+        return getComputedStyle(element, '')
+            .getPropertyValue(horizontal ? 'overflow-x' : 'overflow-y');
+    }
+    
+    function overflowNotHidden(element, horizontal) {
+        return computedOverflow(element, horizontal) !== 'hidden';
+    }
+    
+    function overflowAutoOrScroll(element, horizontal) {
+        return /^(scroll|auto)$/.test(computedOverflow(element, horizontal));
+    }
+    
+    function getScrollRoot() {
+        return (document.scrollingElement || document.body);
+    }
+    
+    function message(message) {
+        if (message.data.CSS !== 'ChangeScrollSpeed') {
+            return;
         }
-    } while ((element = element.parentElement));
-}
-
-function isContentOverflowing(element, horizontal) {
-    const client = horizontal ? element.clientWidth : element.clientHeight;
-    const scroll = horizontal ? element.scrollWidth : element.scrollHeight;
-
-    return (client + 10 < scroll);
-}
-
-function computedOverflow(element, horizontal) {
-    return getComputedStyle(element, '')
-        .getPropertyValue(horizontal ? 'overflow-x' : 'overflow-y');
-}
-
-function overflowNotHidden(element, horizontal) {
-    return computedOverflow(element, horizontal) !== 'hidden';
-}
-
-function overflowAutoOrScroll(element, horizontal) {
-    return /^(scroll|auto)$/.test(computedOverflow(element, horizontal));
-}
-
-function getScrollRoot() {
-    return (document.scrollingElement || document.body);
-}
-
-function message(message) {
-    if (message.data.CSS !== 'ChangeScrollSpeed') {
-        return;
+    
+        let event = message.data;
+        event.target = getFrameByEvent(message.source);
+        wheel(event)
+    }
+    
+    function getFrameByEvent(source) {
+        const iframes = document.getElementsByTagName('iframe');
+    
+        return [].filter.call(iframes, function (iframe) {
+            return iframe.contentWindow === source;
+        })[0];
+    }
+    
+    function chromeMessage(message) {
+        if (message.scrollFactor) {
+            scrollFactor = message.scrollFactor
+        }
     }
 
-    let event = message.data;
-    event.target = getFrameByEvent(message.source);
-    wheel(event)
-}
+    const wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
 
-function getFrameByEvent(source) {
-    const iframes = document.getElementsByTagName('iframe');
+    const el = (window.document || window.document.body || window)
 
-    return [].filter.call(iframes, function (iframe) {
-        return iframe.contentWindow === source;
-    })[0];
-}
+    el.addEventListener(wheelEvent, wheel, {passive: false})
 
-function chromeMessage(message) {
-    if (message.scrollFactor) {
-        scrollFactor = message.scrollFactor
+    function getIFrame(frame) {
+        if((frame !== null) && (frame !== 'undefined') && (frame.width > 0)) {
+            let el = frame;
+            console.log('fired');
+            el.addEventListener(wheelEvent, wheel, {passive: false})
+        }
     }
+
+    getIFrame(window.document.querySelector('iframe'));
+
+    window.addEventListener('message', message);
+
+    chrome.runtime.onMessage.addListener(chromeMessage);
 }
-
-const wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
-const el = (window.document || window.document.body || window)
-el.addEventListener(wheelEvent, wheel, {passive: false})
-
-window.addEventListener('message', message);
-
-chrome.runtime.onMessage.addListener(chromeMessage);

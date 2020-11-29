@@ -2,6 +2,16 @@
 
 #### Download: [Chrome web store package](https://chrome.google.com/webstore/detail/linux-scroll-speed-fix/mlboohjioameadaedfjcpemcaangkkbp)
 
+#### Changelog version 1.6.0
+- Refactored most of the code.
+- CSS Scroll smoothing toggling no longer needs refresh of window.
+- Minor bug fixes.
+
+#### Changelog version 1.5.3
+- Added indicator for if the extension is enabled or not
+- Changed so that the default behaviour in Windows (not custom) disables the extension.
+- Added tooltip for smooth scrolling.
+
 #### Changelog version 1.5.2
 - Reduced Chrome permissions needed
 - Minor bug fix
@@ -27,9 +37,9 @@ Default scroll speed values:
 
 Linux = 1.9
 
-Windows = 1.0
+Windows = 1.0 (extension is disabled by default)
 
-MacOS/Apple products = 1.0 (This needs testing!)
+MacOS = 1.0 (This needs testing!)
 
 #### Thanks to
 
