@@ -91,9 +91,7 @@ async function main() {
     // This function runs every time a scroll is made
     function wheel(event) {
         const target = event.target;
-
-        console.log(target);
-
+        
         if (event.defaultPrevented || event.ctrlKey) {
             return true;
         }
@@ -119,11 +117,14 @@ async function main() {
         if ( ! element) {
             if (isFrame) {
 
+                // This seldom works and leads to further problems. Disabled for now.
+                /*
                 parent.postMessage({
                     deltaX: deltaX,
                     deltaY: deltaY,
                     CSS: 'ChangeScrollSpeed'
                 }, '*');
+                */
 
                 if (event.preventDefault) {
                     // TODO

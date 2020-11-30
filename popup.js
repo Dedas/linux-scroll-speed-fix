@@ -143,9 +143,12 @@ function setScrollFactor(value) {
 async function updateScrollFactor() {
     let value = parseFloat(await getScrollFactor());
 
-    chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {scrollFactor: value, CSS: 'ChangeScrollSpeed'});
+    chrome.tabs.query({windowType: "normal"}, function(tabs) {
+        for(let i = 0; i < tabs.length; i++) {
+            chrome.tabs.sendMessage(tabs[i].id, {scrollFactor: value, CSS: 'ChangeScrollSpeed'});
+        }
     });
+
 }
 
 // SMOOTH SCROLL
@@ -176,8 +179,6 @@ function updateSmoothScroll() {
 
 // This function disables and enables CSS smooth scrolling
 function disableSmoothCSS(value) {
-    
-    chrome.tabs.query({windowType: "normal"}, function(tabs) {
 
         if(value) {
             // Code to insert
@@ -194,7 +195,6 @@ function disableSmoothCSS(value) {
             executeScriptAllTabs(code);
 
         }
-    });
 }
 
 function executeScriptAllTabs(code) {
