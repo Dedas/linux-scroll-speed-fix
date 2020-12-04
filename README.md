@@ -2,6 +2,10 @@
 
 #### Download: [Chrome web store package](https://chrome.google.com/webstore/detail/linux-scroll-speed-fix/mlboohjioameadaedfjcpemcaangkkbp)
 
+#### Changelog version 1.6.1
+- Tab or tabs are now prompted to be refreshed if the plugin is disabled or enabled.
+- Updated icons to match the color theme.
+
 #### Changelog version 1.6.0
 - Refactored most of the code.
 - CSS Scroll smoothing toggling no longer needs refresh of window.

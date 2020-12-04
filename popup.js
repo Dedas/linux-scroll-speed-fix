@@ -20,6 +20,7 @@ init();
 async function init() {
     let smoothScroll = await getSmoothScroll();
     let customSetting = await getCustomSetting();
+    let disableExtension = await getDisableExtension();
     let os = await getOS();
 
     // Do not initiate if custom settings is checked
@@ -39,6 +40,7 @@ async function init() {
 
             setScrollFactor(linuxSpeed);
         } else if(os == 'win') {
+            // TODO Some buginess here with smoothscroll toggle
             // Set Windows values
             osText.innerHTML = 'Windows';
             statusText.innerHTML = 'Disabled';
@@ -87,8 +89,8 @@ async function init() {
         }
     }
 
-    updateDisableExtension();
     updateSmoothScroll();
+    updateDisableExtension(disableExtension);
 }
 
 // Detect OS
@@ -216,8 +218,7 @@ function executeScriptAllTabs(code) {
     });
 }
 
-/* REFRESH TABS - Not used
-
+// REFRESH TABS
 function refreshTab(message) {
 
     if((message) && (confirm(message))) {
@@ -232,7 +233,6 @@ function refreshTab(message) {
         });
     };
 }
-*/
 
 // CUSTOM SETTING
 
@@ -273,12 +273,21 @@ function setDisableExtension(value) {
     chrome.storage.local.set({'disableExtension':value});
 }
 
-function updateDisableExtension() {
+function updateDisableExtension(previousValue) {
 
     if(statusText.innerHTML == 'Enabled') {
         setDisableExtension('false');
+        
+        // Previous value - do refresh
+        if (previousValue == 'true') {
+            refreshTab('A tab refresh is required to enable the extension. Do you want to refresh all tabs? Press "Cancel" to just refresh current tab.')
+        }
     } else {
         setDisableExtension('true');
+
+        if(previousValue == 'false') {
+            refreshTab('A tab refresh is required to disable the extension. Do you want to refresh all tabs? Press "Cancel" to just refresh current tab.')
+        }
     }
 }
 
@@ -295,7 +304,6 @@ scrollFactorInput.addEventListener('change', () => {
     setScrollFactor(scrollFactorInput.value);
 });
 
-// Maybe?
 scrollFactorInput.addEventListener('keyup', () => {
     setScrollFactor(scrollFactorInput.value);
 });
