@@ -27,13 +27,12 @@
 - Fixed banners messing with smooth scroll disable behavior
 
 #### Description
-
 Fix the slow scroll speed in Linux Chrome by setting it close to the Windows value automatically when it detects Linux. When it detects Windows it will set it back. That means you don't have to disable plugins if you dual boot between systems or similar. It also allows for custom values that are saved locally to not mess with synching between different systems.
 
 #### Important notes
-iFrames used on some sites with heavy security blocks attempts to change scroll speed. They will for now use default scroll speed until a better workaround is found.
+iFrames from other domains will use default scroll speed due to security (same-origin-policy). There is to my knowledge nothing to be done about this without some clever rewrite that is currently above my head.
 
-CSS smooth scroll behavior is disabled by default on sites that use it because of lagginess. To my knowledge true smooth scrolling will only be available with hardware acceleration enabled and Google said no to this on Chrome for Linux.
+CSS smooth scroll behavior is disabled by default. To my knowledge, the true smooth scrolling seen in Windows and MacOS will only be available with real hardware acceleration. Google stated that this won't be avaible in Chrome for Linux. The future will tell.
 
 #### Settings
 
