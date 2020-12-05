@@ -65,25 +65,24 @@ async function init() {
 // Main function
 async function main() {
 
-    /* TODO Needs rework with new code
     let smoothScroll = await getSmoothScroll();
 
     //Check for changes in html element to deal with banners changing smooth scrolling behavior
-    
-    if(smoothScroll == 'false') {
-        let mutationObserver = new MutationObserver(function(mutations) {
-            mutations.forEach(function() {
-                document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
-            });
-        });
+    let mutationObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(async function() {
+            
+            smoothScroll = await getSmoothScroll();
 
-        //Extra surveillance for naughty changes
-        mutationObserver.observe(document.querySelectorAll("html")[0], {
-            attributes: true,
-        }); 
-    }
-    */
-        
+            if(smoothScroll == 'false') {
+                document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
+            }  
+        });
+    });
+
+    mutationObserver.observe(document.querySelectorAll("html")[0], {
+        attributes: true,
+    }); 
+
     if (scrollFactor !== undefined) {
         scrollFactor = await getScrollFactor();
     }
@@ -226,7 +225,6 @@ async function main() {
     function getIFrame(frame) {
         if((frame !== null) && (frame !== 'undefined') && (frame.width > 0)) {
             let el = frame;
-            console.log('fired');
             el.addEventListener(wheelEvent, wheel, {passive: false})
         }
     }
