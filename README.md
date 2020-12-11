@@ -2,6 +2,9 @@
 
 #### Download: [Chrome web store package](https://chrome.google.com/webstore/detail/linux-scroll-speed-fix/mlboohjioameadaedfjcpemcaangkkbp)
 
+#### Changelog version 1.6.3
+- Forces OverflowX to be visible. Some sites hides this and this disables scrolling.
+
 #### Changelog version 1.6.2
 - Reworked protection against banners that change behaviour.
 

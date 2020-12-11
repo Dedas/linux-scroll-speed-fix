@@ -46,6 +46,9 @@ async function init() {
 
     // Check if extension is disabled. If not run main function.
     if(disableExtension == 'false') {  
+
+        // Enable overflowX in html (some sites hides this)
+        document.querySelectorAll("html")[0].style.overflowX = "visible";
         
         // Disable smooth scroll if needed
         if(smoothScroll == 'false') {
@@ -90,7 +93,7 @@ async function main() {
     // This function runs every time a scroll is made
     function wheel(event) {
         const target = event.target;
-        
+
         if (event.defaultPrevented || event.ctrlKey) {
             return true;
         }
