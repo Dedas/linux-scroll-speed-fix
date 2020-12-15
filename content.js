@@ -47,8 +47,8 @@ async function init() {
     // Check if extension is disabled. If not run main function.
     if(disableExtension == 'false') {  
 
-        // Enable overflowX in html (some sites hides this)
-        document.querySelectorAll("html")[0].style.overflowX = "visible";
+        // Enable overflowX in html (some sites hides this) -- REMOVED
+        //document.querySelector("html").style.overflow = "auto";
         
         // Disable smooth scroll if needed
         if(smoothScroll == 'false') {
@@ -110,7 +110,7 @@ async function main() {
     
         let element = overflowingAncestor(target, xOnly);
     
-        if (element === getScrollRoot() || element === document.body) {
+        if (element === getScrollRoot()) {
             element = window;
         }
     
@@ -153,11 +153,12 @@ async function main() {
         const rootScrollHeight = root.scrollHeight;
         const rootScrollWidth = root.scrollWidth;
         const isFrame = window.top !== window.self;
-    
+
         do {
             if (horizontal && rootScrollWidth === element.scrollWidth ||
                 !horizontal && rootScrollHeight === element.scrollHeight) {
                 const topOverflowsNotHidden = overflowNotHidden(root, horizontal) && overflowNotHidden(body, horizontal);
+                console.log(topOverflowsNotHidden)
                 const isOverflowCSS = topOverflowsNotHidden || overflowAutoOrScroll(root, horizontal);
     
                 if (isFrame && isContentOverflowing(root, horizontal) || !isFrame && isOverflowCSS) {
@@ -165,7 +166,6 @@ async function main() {
                     return getScrollRoot()
                 }
             } else if (isContentOverflowing(element, horizontal) && overflowAutoOrScroll(element, horizontal)) {
-                
                 return element;
             }
         } while ((element = element.parentElement));
