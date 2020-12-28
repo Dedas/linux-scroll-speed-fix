@@ -2,17 +2,17 @@
 
 #### Download: [Chrome web store package](https://chrome.google.com/webstore/detail/linux-scroll-speed-fix/mlboohjioameadaedfjcpemcaangkkbp)
 
-## FEATURES
-- Automatic "similar-to-Windows" scroll speed in Linux.
-- Custom scroll speed settings
-- Settings are saved locally in the browser
-
 ## DESCRIPTION
 Fixes the slow scroll speed in Chrome for Linux by emulating the Windows scroll speed when the extension detects Linux. When it detects Windows it will disable itself.
 
 The extension also allows for custom scroll speed values in both Windows and Linux. 
 
 All settings are saved locally in the browser to not mess with syncing between different systems.
+
+## FEATURES
+- Automatic "similar-to-Windows" scroll speed in Linux.
+- Custom scroll speed settings
+- Settings are saved locally in the browser
 
 ## CHANGELOG
 
