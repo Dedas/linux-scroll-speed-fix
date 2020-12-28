@@ -1,6 +1,6 @@
 body {
     margin: 0em;
-    min-width: 25em;
+    min-width: 26em;
 }
 
 a {
@@ -63,7 +63,7 @@ input {
     display: flex;
     align-items: center;
     text-align: center;
-    max-width: 4em;
+    max-width: 3.5em;
 }
 
 input[type=checkbox] {

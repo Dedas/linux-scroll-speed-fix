@@ -158,7 +158,6 @@ async function main() {
             if (horizontal && rootScrollWidth === element.scrollWidth ||
                 !horizontal && rootScrollHeight === element.scrollHeight) {
                 const topOverflowsNotHidden = overflowNotHidden(root, horizontal) && overflowNotHidden(body, horizontal);
-                console.log(topOverflowsNotHidden)
                 const isOverflowCSS = topOverflowsNotHidden || overflowAutoOrScroll(root, horizontal);
     
                 if (isFrame && isContentOverflowing(root, horizontal) || !isFrame && isOverflowCSS) {
