@@ -7,6 +7,13 @@
 - Custom scroll speed settings
 - Settings are saved locally in the browser
 
+## DESCRIPTION
+Fixes the slow scroll speed in Chrome for Linux by emulating the Windows scroll speed when the extension detects Linux. When it detects Windows it will disable itself.
+
+The extension also allows for custom scroll speed values in both Windows and Linux. 
+
+All settings are saved locally in the browser to not mess with syncing between different systems.
+
 ## CHANGELOG
 
 #### Version 1.6.5
@@ -46,13 +53,6 @@
 
 #### Version 1.5
 - Fixed banners messing with smooth scroll disable behavior
-
-## DESCRIPTION
-Fixes the slow scroll speed in Chrome for Linux by emulating the Windows scroll speed when the extension detects Linux. When it detects Windows it will disable itself.
-
-The extension also allows for custom scroll speed values in both Windows and Linux. 
-
-All settings are saved locally in the browser to not mess with syncing between different systems.
 
 ## NOTES
 iFrames from other domains will use default scroll speed due to security (same-origin-policy). There is to my knowledge nothing to be done about this without some clever rewrite that is currently above my head.
