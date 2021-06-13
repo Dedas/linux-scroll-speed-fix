@@ -16,6 +16,9 @@ All settings are saved locally in the browser to not mess with syncing between d
 
 ## CHANGELOG
 
+#### Version 1.6.7
+- Fixed overflow issue - again
+
 #### Version 1.6.6
 - Fixed overflow issue
 
