@@ -54,6 +54,7 @@ async function init() {
         if(smoothScroll == 'false') {
             try {
                 document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
+                document.querySelectorAll("html")[0].style.setProperty("height", "auto", "important")
             }
             catch(err) {
                 `console`.log(err);
@@ -78,6 +79,7 @@ async function main() {
 
             if(smoothScroll == 'false') {
                 document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
+                document.querySelectorAll("html")[0].style.setProperty("height", "auto", "important")
             }  
         });
     });
