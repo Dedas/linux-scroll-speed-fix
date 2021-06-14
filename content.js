@@ -53,11 +53,13 @@ async function init() {
         // Disable smooth scroll if needed
         if(smoothScroll == 'false') {
             try {
-                document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
-                document.querySelectorAll("html")[0].style.setProperty("overflow-x", "auto")
+                window.onload = () => {
+                    document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
+                    document.querySelectorAll("html")[0].style.overflowX = "auto";
+                }
             }
             catch(err) {
-                `console`.log(err);
+                console.log(err);
             }
         }
         
@@ -78,8 +80,11 @@ async function main() {
             smoothScroll = await getSmoothScroll();
 
             if(smoothScroll == 'false') {
-                document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
-                document.querySelectorAll("html")[0].style.setProperty("overflow-x", "auto")
+                window.onload = () => {
+                    document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
+                    document.querySelectorAll("html")[0].style.overflowX = "auto";
+                }
+
             }  
         });
     });
