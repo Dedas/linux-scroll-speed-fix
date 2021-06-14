@@ -16,6 +16,9 @@ All settings are saved locally in the browser to not mess with syncing between d
 
 ## CHANGELOG
 
+#### Version 1.6.9
+- Made overflow fix compatible with fullscreen
+
 #### Version 1.6.8
 - Made overflow fix apply more reliably
 

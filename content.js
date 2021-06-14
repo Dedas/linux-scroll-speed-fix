@@ -55,7 +55,8 @@ async function init() {
             try {
                 window.onload = () => {
                     document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
-                    document.querySelectorAll("html")[0].style.overflowX = "auto";
+                    document.querySelector("body").style.scrollBehavior = "auto"
+                    document.querySelectorAll("html")[0].style.overflowX = "hidden";
                 }
             }
             catch(err) {
@@ -82,7 +83,9 @@ async function main() {
             if(smoothScroll == 'false') {
                 window.onload = () => {
                     document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
-                    document.querySelectorAll("html")[0].style.overflowX = "auto";
+                    document.querySelector("body").style.scrollBehavior = "auto"
+                    document.querySelectorAll("html")[0].style.overflowX = "hidden";
+                    /*document.querySelectorAll("html")[0].style.setProperty("", "auto", "important")*/
                 }
 
             }  
