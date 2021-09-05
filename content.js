@@ -86,9 +86,14 @@ async function main() {
         });
     });
 
-    mutationObserver.observe(document.querySelectorAll("html")[0], {
-        attributes: true,
-    }); 
+    try {
+        mutationObserver.observe(document.querySelectorAll("html")[0], {
+            attributes: true,
+        }); 
+    } catch (err) {
+        console.log(err)
+    }
+
 
     if (scrollFactor !== undefined) {
         scrollFactor = await getScrollFactor();
