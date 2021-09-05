@@ -46,9 +46,6 @@ async function init() {
 
     // Check if extension is disabled. If not run main function.
     if(disableExtension == 'false') {  
-
-        // Enable overflowX in html (some sites hides this) -- REMOVED
-        //document.querySelector("html").style.overflow = "auto";
         
         // Disable smooth scroll if needed
         if(smoothScroll == 'false') {
@@ -126,15 +123,6 @@ async function main() {
         if ( ! element) {
             if (isFrame) {
 
-                // This seldom works and leads to further problems. Disabled for now.
-                /*
-                parent.postMessage({
-                    deltaX: deltaX,
-                    deltaY: deltaY,
-                    CSS: 'ChangeScrollSpeed'
-                }, '*');
-                */
-
                 if (event.preventDefault) {
                     // TODO
                     // Is there a better solution for the iFrames?
@@ -149,28 +137,26 @@ async function main() {
         /* SPECIAL SOLUTIONS */
         
         // Youtube fullscreen
-        let youtubeFullScreen = null
-        
-        youtubeFullScreen = window.document.getElementsByTagName('ytd-app')[0]
 
-        if (youtubeFullScreen && window.document.fullscreenElement) {
-            youtubeFullScreen.scrollBy({left: deltaX * scrollFactor, top: deltaY * scrollFactor, behavior:'auto'});
+        if (window.location.hostname === 'youtube.com') {
+            youtubeFullScreen = element.getElementsByTagName('ytd-app')[0]
+
+            if (youtubeFullScreen && window.document.fullscreenElement) {
+                youtubeFullScreen.scrollBy({left: deltaX * scrollFactor, top: deltaY * scrollFactor, behavior:'auto'});
+            }
         }
-        
-        // Outlook
-        if ((window.location.hostname === 'outlook.live.com') ||  (window.location.hostname === 'outlook.office365.com')) {
-            // Disabled scrolling modification for now...
-            return null
+
+        else if (window.location.hostname === 'www.nexusmods.com') {
+            getRealRoot().scrollBy({left: deltaX * scrollFactor, top: deltaY * scrollFactor, behavior:'auto'});
+        }
         
         // Apply scrolling
-        } else {
-            window.scrollBy({left: deltaX * scrollFactor, top: deltaY * scrollFactor, behavior:'auto'});
-        }
-    
-        if (event.preventDefault) {
-            event.preventDefault();
+        else {
+            element.scrollBy({left: deltaX * scrollFactor, top: deltaY * scrollFactor, behavior:'auto'});
+            
         }
 
+        event.preventDefault();
     }
     
     function overflowingAncestor(element, horizontal) {
@@ -191,7 +177,7 @@ async function main() {
                     return getScrollRoot()
                 }
             } else if (isContentOverflowing(element, horizontal) && overflowAutoOrScroll(element, horizontal)) {
-                return getRealRoot();
+                return element;
             }
         } while ((element = element.parentElement));
     }
