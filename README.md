@@ -16,6 +16,10 @@ All settings are saved locally in the browser to not mess with syncing between d
 
 ## CHANGELOG
 
+#### Version 1.7.0
+- Fixed Youtube fullscreen scroll problems
+- Disabled scrolling plugin on Outlook until fix is found
+
 #### Version 1.6.9
 - Made overflow fix compatible with fullscreen
 
