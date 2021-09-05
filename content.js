@@ -84,7 +84,7 @@ async function main() {
                 window.onload = () => {
                     document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
                     document.querySelector("body").style.scrollBehavior = "auto"
-                    document.querySelectorAll("html")[0].style.overflowX = "hidden";
+                    /*document.querySelectorAll("html")[0].style.overflowX = "hidden";*/
                     /*document.querySelectorAll("html")[0].style.setProperty("", "auto", "important")*/
                 }
 
@@ -119,7 +119,7 @@ async function main() {
         const xOnly = (deltaX && !deltaY);
     
         let element = overflowingAncestor(target, xOnly);
-    
+
         if (element === getScrollRoot()) {
             element = window;
         }
@@ -148,8 +148,27 @@ async function main() {
     
             return true;
         }
-    
-        element.scrollBy(deltaX * scrollFactor, deltaY * scrollFactor);
+
+        /* SPECIAL SOLUTIONS */
+        
+        // Youtube fullscreen
+        let youtubeFullScreen = null
+        
+        youtubeFullScreen = window.document.getElementsByTagName('ytd-app')[0]
+
+        if (youtubeFullScreen && window.document.fullscreenElement) {
+            youtubeFullScreen.scrollBy({left: deltaX * scrollFactor, top: deltaY * scrollFactor, behavior:'auto'});
+        }
+        
+        // Outlook
+        if (window.location.hostname === 'outlook.live.com') {
+            // Disabled scrolling modification for now...
+            return null
+        
+        // Apply scrolling
+        } else {
+            window.scrollBy({left: deltaX * scrollFactor, top: deltaY * scrollFactor, behavior:'auto'});
+        }
     
         if (event.preventDefault) {
             event.preventDefault();
@@ -171,11 +190,11 @@ async function main() {
                 const isOverflowCSS = topOverflowsNotHidden || overflowAutoOrScroll(root, horizontal);
     
                 if (isFrame && isContentOverflowing(root, horizontal) || !isFrame && isOverflowCSS) {
-    
+                    
                     return getScrollRoot()
                 }
             } else if (isContentOverflowing(element, horizontal) && overflowAutoOrScroll(element, horizontal)) {
-                return element;
+                return getRealRoot();
             }
         } while ((element = element.parentElement));
     }
@@ -188,8 +207,7 @@ async function main() {
     }
     
     function computedOverflow(element, horizontal) {
-        return getComputedStyle(element, '')
-            .getPropertyValue(horizontal ? 'overflow-x' : 'overflow-y');
+        return getComputedStyle(element, '').getPropertyValue(horizontal ? 'overflow-x' : 'overflow-y');
     }
     
     function overflowNotHidden(element, horizontal) {
@@ -202,6 +220,10 @@ async function main() {
     
     function getScrollRoot() {
         return (document.scrollingElement || document.body);
+    }
+
+    function getRealRoot() {
+        return document.scrollingElement;
     }
     
     function message(message) {
