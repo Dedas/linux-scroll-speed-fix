@@ -18,6 +18,7 @@ All settings are saved locally in the browser to not mess with syncing between d
 
 #### Version 1.7.0
 - Fixed Youtube fullscreen scroll problems
+- Fixed images on Instagram not loading correctly when scrolling
 - Disabled scrolling plugin on Outlook until fix is found
 
 #### Version 1.6.9
