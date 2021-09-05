@@ -56,7 +56,6 @@ async function init() {
                 window.onload = () => {
                     document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
                     document.querySelector("body").style.scrollBehavior = "auto"
-                    document.querySelectorAll("html")[0].style.overflowX = "hidden";
                 }
             }
             catch(err) {
@@ -84,8 +83,6 @@ async function main() {
                 window.onload = () => {
                     document.querySelectorAll("html")[0].style.scrollBehavior = "auto";
                     document.querySelector("body").style.scrollBehavior = "auto"
-                    /*document.querySelectorAll("html")[0].style.overflowX = "hidden";*/
-                    /*document.querySelectorAll("html")[0].style.setProperty("", "auto", "important")*/
                 }
 
             }  
@@ -161,7 +158,7 @@ async function main() {
         }
         
         // Outlook
-        if (window.location.hostname === 'outlook.live.com') {
+        if ((window.location.hostname === 'outlook.live.com') ||  (window.location.hostname === 'outlook.office365.com')) {
             // Disabled scrolling modification for now...
             return null
         
