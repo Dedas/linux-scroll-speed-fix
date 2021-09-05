@@ -16,6 +16,9 @@ All settings are saved locally in the browser to not mess with syncing between d
 
 ## CHANGELOG
 
+#### Version 1.7.1
+- Added Outlook 365 to exception list
+
 #### Version 1.7.0
 - Fixed Youtube fullscreen scroll problems
 - Fixed images on Instagram not loading correctly when scrolling
