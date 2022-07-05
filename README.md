@@ -16,6 +16,10 @@ All settings are saved locally in the browser to not mess with syncing between d
 
 ## CHANGELOG
 
+#### Version 1.8.0
+- Add Dark theme when browser is in dark mode
+- Switch from manifest V2 to V3 to continue to work after V2 removal
+
 #### Version 1.7.2
 - Fixed Outlook scrolling
 
