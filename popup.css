@@ -1,3 +1,61 @@
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #303030;
+        color: #fff;
+    }
+
+    .tooltip {
+        border-bottom: 1px dashed #fff;
+    }
+
+    .tooltip:before {
+        background:white;
+        color: black;
+    }
+
+    input:disabled {
+        background-color: #202124;
+        color: white;
+    }
+
+    input:enabled {
+        background: #393939;
+    }
+
+    #github-link a {
+        color: #4C86CD;
+    }
+
+    #scrollFactorInput {
+        color: white;
+    }
+}
+
+@media (prefers-color-scheme: white) {
+    body {
+        background-color: #fff;
+        color: #000;
+    }
+
+    .tooltip {
+        border-bottom: 1px dashed #000;
+    }
+
+    .tooltip:before {
+        background:black;
+        color: white;
+    }
+
+    input:disabled {
+        background-color: white;
+        color: black;
+    }
+
+    input:enabled {
+        background: lightgray;
+    }
+}
+
 body {
     margin: 0em;
     min-width: 26em;
@@ -5,10 +63,6 @@ body {
 
 a {
     text-decoration: none;
-}
-
-a:visited {
-    color: blue;
 }
 
 #osDetected {
@@ -31,27 +85,20 @@ a:visited {
 
 .tooltip {
     position: relative;
-    border-bottom: 1px dashed #000;
 }
 
 .tooltip:before {
     content: attr(data-text);
     position:absolute;
-
     top:10%;
     transform:translateY(-110%);
-
     left:-150%;
     margin-left:15px;
-
     width:175px;
     height:auto;
     padding:5px;
     border-radius:10px;
-    background:#000;
-    color: white;
     font-size: 0.7rem;
-
     display: none;
 }
 
@@ -72,14 +119,11 @@ input[type=checkbox] {
 }
 
 input:disabled {
-    background-color: white;
-    color: black;
     border: none;
 }
 
 input:enabled {
     border: none;
-    background: lightgray;
 }
 
 label {
