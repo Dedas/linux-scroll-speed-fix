@@ -18,6 +18,8 @@ All settings are saved locally in the browser to not mess with syncing between d
 
 #### Version 2.0.0
 - Switch to manifest V3.
+- Add Auto update from Git.
+- Split the extension in private browsing.
 
 ## NOTES
 iFrames from other domains will use default scroll speed due to security (same-origin-policy). There is to my knowledge nothing to be done about this without some clever rewrite that is currently above my head.
