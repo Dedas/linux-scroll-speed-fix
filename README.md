@@ -27,17 +27,7 @@ CSS smooth scroll behavior is disabled by default. To my knowledge, the true smo
 Please report bugs with description and address to the site where you encountered it.
 
 Send bug report here:
-https://github.com/Dedas/linux-scroll-speed-fix/issues
-
-#### Settings
-
-Default scroll speed values:
-
-Linux = 1.9
-
-Windows = 1.0 (extension is disabled by default)
-
-MacOS = 1.0 (This needs testing!)
+https://github.com/BirdInFire/linux-scroll-speed-fix/issues
 
 #### Thanks to
 
