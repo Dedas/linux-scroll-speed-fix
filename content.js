@@ -26,17 +26,28 @@ async function getScrollFactor() {
 
 async function getDisableExtension() {
     let result = await getSetting('disableExtension');
+    const ignoredDomains = (await getSetting('ignoredDomains')).ignoredDomains ?? [];
+
+    let pageIsIgnored = ignoredDomains.find(el => {
+        if (el.endsWith('*')) {
+            el = el.slice(0, -1);
+            return window.location.href.startsWith(el);
+        } else if (window.location.href === el ||window.location.host === el) {
+            return true;
+        }
+    });
+    
+    if (pageIsIgnored) {
+        return 'true';
+    }
 
     return result.disableExtension;
 }
 
 async function getSmoothScroll() {
-    let globalSwitch = await getSetting('smoothScroll');
-    let ignoredDomain = await getSetting('ignoredDomains');
-
-    console.log(ignoredDomain);
-
-    return globalSwitch.smoothScroll;
+    const result = await getSetting('smoothScroll');
+    
+    return result.smoothScroll;
 }
 
 // *** INIT ***
