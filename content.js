@@ -31,9 +31,12 @@ async function getDisableExtension() {
 }
 
 async function getSmoothScroll() {
-    let result = await getSetting('smoothScroll');
+    let globalSwitch = await getSetting('smoothScroll');
+    let ignoredDomain = await getSetting('ignoredDomains');
 
-    return result.smoothScroll;
+    console.log(ignoredDomain);
+
+    return globalSwitch.smoothScroll;
 }
 
 // *** INIT ***

@@ -125,6 +125,14 @@ label {
     padding: 0.5em;
 }
 
+.ignored-domains-wrapper {
+    padding: 0.5em;
+}
+
+.ignored-domains-wrapper label {
+    margin-bottom: 3px;
+}
+
 .version {
     display: flex;
     flex-direction: column;
