@@ -32,7 +32,7 @@
             <label for="smoothScrollButton">CSS scroll smoothing:
                 <input id="smoothScrollButton" type="checkbox">
             </label>
-            <label id="recommended"><span data-text="Smooth scrolling enabled by CSS. 
+            <label class="tooltip-label"><span data-text="Smooth scrolling enabled by CSS. 
                 It is highly recommended to disable this type of smoothing when using the extension in Linux,
                  or when altering the scroll speed at all. It can be laggy."
                 class="tooltip">(What is this?)
@@ -40,8 +40,22 @@
         </div>
 
         <div class="ignored-domains-wrapper">
-            <label for="ignoredDomains">Ignored domains:</label>
-            <textarea id="ignoredDomains" cols="30" rows="5"></textarea>
+            <div class="flex">
+                <label for="ignoredDomains">Ignored domains:</label>
+                <label class="tooltip-label">
+                    <span data-text="The list supports full matches or wildcards: 'https://en.wikipedia.org/wiki/Main_Page' will match a single page, 
+                    while 'https://en.wikipedia.org/wiki/*' will match all the sub-pages" class="tooltip">(How does it work?)</span>
+                </label>
+            </div>
+            <textarea id="ignoredDomains" cols="50" rows="13" placeholder="Both complete matches and wildcards (*) are supported:
+
+(matches one page):
+https://en.wikipedia.org/wiki/Main_Page
+
+(matches all the wiki pages on wikipedia)
+https://en.wikipedia.org/wiki/*
+
+Note: wildcards MUST be at the end of the URL"></textarea>
         </div>
 
         <div class="version">
