@@ -32,8 +32,11 @@ async function getDisableExtension() {
         if (el.endsWith('*')) {
             el = el.slice(0, -1);
             return window.location.href.startsWith(el);
-        } else if (window.location.href === el ||window.location.host === el) {
-            return true;
+        } else {
+            el = el.split('?')[0];
+            if ((`${window.location.origin}${window.location.pathname}` === el) || (window.location.host === el)) {
+                return true;
+            }
         }
     });
     
