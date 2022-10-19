@@ -20,7 +20,7 @@ a:visited {
     margin-right: auto;
 }
 
-#recommended {
+.tooltip-label {
     font-size: 0.7em;
     margin: 0em;
 }
@@ -125,6 +125,18 @@ label {
     padding: 0.5em;
 }
 
+.ignored-domains-wrapper {
+    padding: 0.5em;
+}
+
+.ignored-domains-wrapper label {
+    margin-bottom: 3px;
+}
+
+.flex {
+    display: flex;
+}
+
 .version {
     display: flex;
     flex-direction: column;
@@ -133,4 +145,8 @@ label {
     font-size: 0.7em;
     color: grey;
     padding: 1em 0.5em;
+}
+
+#ignoredDomains {
+    font-size: 0.95em;
 }

@@ -6,6 +6,7 @@ const statusText = document.getElementById('statusText');
 const scrollFactorInput = document.getElementById('scrollFactorInput');
 const customSettingButton = document.getElementById('customSettingButton');
 const smoothScrollButton = document.getElementById('smoothScrollButton');
+const ignoredDomainsTextArea = document.getElementById('ignoredDomains');
 
 // Default scroll speed variables
 const linuxSpeed = 1.9;
@@ -85,12 +86,18 @@ async function init() {
         if(smoothScroll == 'true') {
             smoothScrollButton.checked = true;
         } else {
-            smoothScrollButton.checked = false;       
+            smoothScrollButton.checked = false;
         }
     }
 
     updateSmoothScroll();
     updateDisableExtension(disableExtension);
+
+    ignoredDomainsTextArea.value = '';
+    const {ignoredDomains} = await getSetting('ignoredDomains');
+    if (ignoredDomains) {
+        ignoredDomainsTextArea.value = ignoredDomains.join('\n');
+    }
 }
 
 // Detect OS
@@ -261,6 +268,15 @@ function updateCustomSetting() {
         init();
 }
 
+function updateIgnoredDomains() {
+    const domains = ignoredDomainsTextArea.value.split('\n');
+    for (let i = 0; i < domains.length; i++) {
+        domains[i] = domains[i].trim();
+    }
+
+    chrome.storage.local.set({'ignoredDomains': domains})
+}
+
 // DISABLE EXTENSION
 
 async function getDisableExtension() {
@@ -298,6 +314,9 @@ customSettingButton.addEventListener('change', updateCustomSetting);
 
 // Smooth Scroll button
 smoothScrollButton.addEventListener('change', updateSmoothScroll);
+
+// Modified ignored domains list
+ignoredDomainsTextArea.addEventListener('keyup', updateIgnoredDomains);
 
 // Scroll factor input field
 scrollFactorInput.addEventListener('change', () => {

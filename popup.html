@@ -32,13 +32,28 @@
             <label for="smoothScrollButton">CSS scroll smoothing:
                 <input id="smoothScrollButton" type="checkbox">
             </label>
-            <label id="recommended"><span data-text="Smooth scrolling enabled by CSS. 
+            <label class="tooltip-label"><span data-text="Smooth scrolling enabled by CSS. 
                 It is highly recommended to disable this type of smoothing when using the extension in Linux,
                  or when altering the scroll speed at all. It can be laggy."
                 class="tooltip">(What is this?)
             </span></label>
-            
         </div>
+
+        <div class="ignored-domains-wrapper">
+            <div class="flex">
+                <label for="ignoredDomains">Ignored domains:</label>
+            </div>
+            <textarea id="ignoredDomains" cols="50" rows="13" placeholder="Both complete matches and wildcards (*) are supported:
+
+(matches one page):
+https://en.wikipedia.org/wiki/Main_Page
+
+(matches all the wiki pages on wikipedia)
+https://en.wikipedia.org/wiki/*
+
+Note: wildcards MUST be at the end of the URL"></textarea>
+        </div>
+
         <div class="version">
             <label id="github-link"><a href="https://github.com/Dedas/linux-scroll-speed-fix.git" target="_blank">Github page<a></label>
             <label id="version">Version 1.7.2</label>
